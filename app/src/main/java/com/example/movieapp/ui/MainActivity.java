@@ -1,4 +1,4 @@
-package com.example.movieapp;
+package com.example.movieapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,17 +7,15 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.example.movieapp.R;
 import com.example.movieapp.models.Movie;
 import com.example.movieapp.models.Slider;
-import com.example.movieapp.ui.MovieAdapter;
-import com.example.movieapp.ui.MovieItemClickListener;
-import com.example.movieapp.ui.SliderPagerAdapter;
+import com.example.movieapp.adapters.MovieAdapter;
+import com.example.movieapp.adapters.MovieItemClickListener;
+import com.example.movieapp.adapters.SliderPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

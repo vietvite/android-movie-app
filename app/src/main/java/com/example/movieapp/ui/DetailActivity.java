@@ -1,4 +1,4 @@
-package com.example.movieapp;
+package com.example.movieapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.movieapp.R;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -31,8 +33,6 @@ public class DetailActivity extends AppCompatActivity {
 
         int movieThumbResId = getIntent().getExtras().getInt("movieThumb");
         String movieTitle = getIntent().getExtras().getString("title");
-
-        Toast.makeText(this, "Title: " + movieTitle, Toast.LENGTH_SHORT).show();
 
         ivMovieImg.setImageResource(movieThumbResId);
         tvMovieTitle.setText(movieTitle);
