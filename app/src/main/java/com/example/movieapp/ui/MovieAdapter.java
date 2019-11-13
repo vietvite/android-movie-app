@@ -11,18 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapp.R;
-import com.example.movieapp.model.Movie;
+import com.example.movieapp.models.Movie;
 
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
     Context context;
-    List<Movie> mData;
+    List<Movie> lstMovies;
+    MovieItemClickListener movieItemClickListener;
 
 
-    public MovieAdapter(Context context, List<Movie> data) {
+    public MovieAdapter(Context context, List<Movie> data, MovieItemClickListener clickListener) {
         this.context = context;
-        this.mData = data;
+        this.lstMovies = data;
+        movieItemClickListener = clickListener;
     }
 
     @NonNull
@@ -34,24 +36,31 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.TvTitle.setText(mData.get(position).getTitle());
-        holder.ImgvThumbnail.setImageResource(mData.get(position).getThumbnail());
+        holder.mTitle.setText(lstMovies.get(position).getTitle());
+        holder.mThumbnail.setImageResource(lstMovies.get(position).getThumbnail());
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return lstMovies.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView TvTitle;
-        private ImageView ImgvThumbnail;
+        private TextView mTitle;
+        private ImageView mThumbnail;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            TvTitle = itemView.findViewById(R.id.movie_item_title);
-            ImgvThumbnail = itemView.findViewById(R.id.movie_item_thumbnail);
+            mTitle = itemView.findViewById(R.id.movie_item_title);
+            mThumbnail = itemView.findViewById(R.id.movie_item_thumbnail);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    movieItemClickListener.onMovieClick(lstMovies.get(getAdapterPosition()), mThumbnail);
+                }
+            });
         }
     }
 }

@@ -11,29 +11,28 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.movieapp.R;
-import com.example.movieapp.model.Slider;
+import com.example.movieapp.models.Slider;
 
 import java.util.List;
 
 public class SliderPagerAdapter extends PagerAdapter {
-    private Context mContext;
-    private List<Slider> mList;
+    private Context context;
+    private List<Slider> lstSlides;
 
-    public SliderPagerAdapter(Context mContext, List<Slider> mList) {
-        this.mContext = mContext;
-        this.mList = mList;
+    public SliderPagerAdapter(Context context, List<Slider> mList) {
+        this.context = context;
+        this.lstSlides = mList;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View slideLayout = inflater.inflate(R.layout.slider_item, null);
-
+        View slideLayout = LayoutInflater.from(context).inflate(R.layout.slider_item, null);
         ImageView slideImage = slideLayout.findViewById(R.id.slider_img);
         TextView slideText = slideLayout.findViewById(R.id.slider_title);
-        slideImage.setImageResource(mList.get(position).getImage());
-        slideText.setText(mList.get(position).getTitle());
+
+        slideImage.setImageResource(lstSlides.get(position).getImage());
+        slideText.setText(lstSlides.get(position).getTitle());
 
         container.addView(slideLayout);
         return slideLayout;
@@ -41,7 +40,7 @@ public class SliderPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mList.size();
+        return lstSlides.size();
     }
 
     @Override
