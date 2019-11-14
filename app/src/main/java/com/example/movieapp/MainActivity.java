@@ -84,13 +84,16 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
 
     @Override
     public void onMovieClick(Movie movie, ImageView movieThumbnail) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("title", movie.getTitle());
-        intent.putExtra("movieThumb", movie.getThumbnail());
+//        Intent intent = new Intent(this, DetailActivity.class);
+//        intent.putExtra("title", movie.getTitle());
+//        intent.putExtra("movieThumb", movie.getThumbnail());
+//
+//        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+//                MainActivity.this, movieThumbnail, "movieThumb");
+//
+//        startActivity(intent, options.toBundle());
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                MainActivity.this, movieThumbnail, "movieThumb");
-
-        startActivity(intent, options.toBundle());
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
