@@ -8,7 +8,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.movieapp.R;
 import com.example.movieapp.models.Movie;
@@ -16,10 +18,23 @@ import com.example.movieapp.models.Slider;
 import com.example.movieapp.adapters.MovieAdapter;
 import com.example.movieapp.adapters.MovieItemClickListener;
 import com.example.movieapp.adapters.SliderPagerAdapter;
-import com.example.movieapp.services.MovieService;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements MovieItemClickListener {
 
@@ -27,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private List<Slider> lstSlides;
     private ViewPager sliderpager;
     private RecyclerView trendingRv;
-    private RecyclerView phimLeRv;
+    private RecyclerView list1Rv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +59,65 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         initView();
         initSlider();
         initMovies();
+
+//        Intent mIntent = new Intent(this, PlayerActivity.class);
+//        startActivity(mIntent);
     }
 
     private void initMovies() {
-        MovieAdapter trendingAdapter = new MovieAdapter(this, MovieService.getTrendingFilms(), this);
+        OkHttpClient client = new OkHttpClient();
+
+        Moshi moshi = new Moshi.Builder().build();
+        Type movieType = Types.newParameterizedType(List.class, Movie.class);
+        final JsonAdapter<List<Movie>> jsonAdapter = moshi.adapter(movieType);
+
+
+        Request request = new Request.Builder()
+                .url("https://film-vietvite.herokuapp.com/api/movie/trending")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("Error", "Network Error");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    String resData = response.body().string();
+                    JSONObject jsonObject = new JSONObject(resData);
+                    String lstMovieStr = jsonObject.getString("data");
+                    List<Movie> lstMovies = jsonAdapter.fromJson(lstMovieStr);
+                    Log.e("lstMovies", lstMovieStr);
+
+                    MainActivity.this.runOnUiThread(() -> {
+                        updateTrendingMovies(lstMovies);
+                        updateActionMovies(lstMovies);
+                    });
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void updateTrendingMovies(List<Movie> lstMovies) {
+        TextView tvTrendingTitle = findViewById(R.id.tv_trending_title);
+        tvTrendingTitle.setText("Trending now");
+        MovieAdapter trendingAdapter = new MovieAdapter(MainActivity.this, lstMovies, MainActivity.this);
         trendingRv.setAdapter(trendingAdapter);
-        trendingRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        trendingRv.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+    }
 
-
-        MovieAdapter phimleAdapter = new MovieAdapter(this, MovieService.getActionFilms(), this);
-        phimLeRv.setAdapter(phimleAdapter);
-        phimLeRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    private void updateActionMovies(List<Movie> lstMovies) {
+        TextView tvTrendingTitle = findViewById(R.id.tv_list1_title);
+        tvTrendingTitle.setText("Hành động");
+        MovieAdapter trendingAdapter = new MovieAdapter(MainActivity.this, lstMovies, MainActivity.this);
+        list1Rv.setAdapter(trendingAdapter);
+        list1Rv.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void initSlider() {
@@ -69,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private void initView() {
         sliderpager = findViewById(R.id.slider_pager);
         trendingRv = findViewById(R.id.Rv_trending);
-        phimLeRv = findViewById(R.id.Rv_phimle);
+        list1Rv = findViewById(R.id.Rv_phimle);
+
     }
 
     @Override
@@ -77,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("title", movie.getTitle());
         intent.putExtra("movieThumb", movie.getThumbnail());
+        intent.putExtra("desc", movie.getDescription());
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                 MainActivity.this, movieThumbnail, "movieThumb");

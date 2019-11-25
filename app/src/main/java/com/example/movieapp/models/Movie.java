@@ -3,23 +3,25 @@ package com.example.movieapp.models;
 public class Movie {
     private String title;
     private String description;
-    private int thumbnail;
+    private String thumbnail;
     private String rating;
-    private String linkStream;
-    private String studio;
+    private String movieUrl;
+    private String releaseDate;
+    private long viewNumber;
 
-    public Movie(String title, int thumbnail) {
+    public Movie(String title, String thumbnail) {
         this.title = title;
         this.thumbnail = thumbnail;
     }
 
-    public Movie(String title, String description, int thumbnail, String rating, String linkStream, String studio) {
+    public Movie(String title, String description, String thumbnail, String rating, String movieUrl, String releaseDate, long viewNumber) {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
         this.rating = rating;
-        this.linkStream = linkStream;
-        this.studio = studio;
+        this.movieUrl = movieUrl;
+        this.releaseDate = releaseDate;
+        this.viewNumber = viewNumber;
     }
 
     public String getTitle() {
@@ -38,11 +40,11 @@ public class Movie {
         this.description = description;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -54,19 +56,27 @@ public class Movie {
         this.rating = rating;
     }
 
-    public String getLinkStream() {
-        return linkStream;
+    public String getMovieUrl() {
+        return movieUrl;
     }
 
-    public void setLinkStream(String linkStream) {
-        this.linkStream = linkStream;
+    public void setMovieUrl(String movieUrl) {
+        this.movieUrl = movieUrl;
     }
 
-    public String getStudio() {
-        return studio;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setStudio(String studio) {
-        this.studio = studio;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public long getViewNumber() {
+        return viewNumber;
+    }
+
+    public void setViewNumber(long viewNumber) {
+        this.viewNumber = viewNumber;
     }
 }
