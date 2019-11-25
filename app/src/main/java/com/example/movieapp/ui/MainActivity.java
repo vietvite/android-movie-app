@@ -38,7 +38,6 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements MovieItemClickListener {
 
-
     private List<Slider> lstSlides;
     private ViewPager sliderpager;
     private RecyclerView trendingRv;
@@ -59,9 +58,6 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         initView();
         initSlider();
         initMovies();
-
-//        Intent mIntent = new Intent(this, PlayerActivity.class);
-//        startActivity(mIntent);
     }
 
     private void initMovies() {
@@ -143,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         intent.putExtra("title", movie.getTitle());
         intent.putExtra("movieThumb", movie.getThumbnail());
         intent.putExtra("desc", movie.getDescription());
+        intent.putExtra("linkMovie", movie.getMovieUrl());
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                 MainActivity.this, movieThumbnail, "movieThumb");

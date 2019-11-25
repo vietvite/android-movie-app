@@ -9,6 +9,7 @@ import com.example.movieapp.R;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -18,7 +19,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 
 public class PlayerActivity extends AppCompatActivity {
 
-    private static final String VIDEO_URL = "https://demo.streamaserver.org/file/serve/13.mp4";
+    private String VIDEO_URL;
     private SimpleExoPlayer simpleExoPlayer;
     private PlayerView playerView;
 
@@ -26,6 +27,14 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
+        VIDEO_URL = getIntent().getExtras().getString("linkMovie");
+        Log.e("VIDEO_URL ======= TRUOC ", VIDEO_URL);
+        if(VIDEO_URL == null) {
+            VIDEO_URL = "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_1920_18MG.mp4";
+        }
+
+        Log.e("VIDEO_URL ======= SAU ", VIDEO_URL);
 
         playerView = findViewById(R.id.exo_player);
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);

@@ -2,8 +2,10 @@ package com.example.movieapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class DetailActivity extends AppCompatActivity {
         String movieImg = getIntent().getExtras().getString("movieThumb");
         String movieTitle = getIntent().getExtras().getString("title");
         String movieDesc = getIntent().getExtras().getString("desc");
+        String linkMovie = getIntent().getExtras().getString("linkMovie");
 
         Glide.with(this).load(movieImg).into(ivMovieImg);
         tvMovieTitle.setText(movieTitle);
@@ -56,5 +59,14 @@ public class DetailActivity extends AppCompatActivity {
                 .load(movieImg)
                 .apply(RequestOptions.bitmapTransform(new BlurTransformation(30, 3)))
                 .into(ivMovieCover);
+
+        btnStartPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(DetailActivity.this, PlayerActivity.class);
+                mIntent.putExtra("linkMovie", linkMovie);
+                startActivity(mIntent);
+            }
+        });
     }
 }

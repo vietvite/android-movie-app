@@ -1,6 +1,7 @@
 package com.example.movieapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
 import com.example.movieapp.models.Slider;
+import com.example.movieapp.ui.MainActivity;
+import com.example.movieapp.ui.PlayerActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -31,9 +35,19 @@ public class SliderPagerAdapter extends PagerAdapter {
         View slideLayout = LayoutInflater.from(context).inflate(R.layout.slider_item, null);
         ImageView slideImage = slideLayout.findViewById(R.id.slider_img);
         TextView slideText = slideLayout.findViewById(R.id.slider_title);
+        FloatingActionButton btnPlay = slideLayout.findViewById(R.id.btn_hot_play);
 
         Glide.with(container).load(lstSlides.get(position).getImage()).into(slideImage);
         slideText.setText(lstSlides.get(position).getTitle());
+
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(context, PlayerActivity.class);
+                mIntent.putExtra("linkMovie", "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_1920_18MG.mp4");
+                context.startActivity(mIntent);
+            }
+        });
 
         container.addView(slideLayout);
         return slideLayout;
