@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
 import com.example.movieapp.models.Slider;
 
@@ -31,7 +32,7 @@ public class SliderPagerAdapter extends PagerAdapter {
         ImageView slideImage = slideLayout.findViewById(R.id.slider_img);
         TextView slideText = slideLayout.findViewById(R.id.slider_title);
 
-        slideImage.setImageResource(lstSlides.get(position).getImage());
+        Glide.with(container).load(lstSlides.get(position).getImage()).into(slideImage);
         slideText.setText(lstSlides.get(position).getTitle());
 
         container.addView(slideLayout);
