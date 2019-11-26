@@ -9,7 +9,6 @@ import com.example.movieapp.R;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -28,13 +27,10 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        VIDEO_URL = getIntent().getExtras().getString("linkMovie");
-        Log.e("VIDEO_URL ======= TRUOC ", VIDEO_URL);
+//        VIDEO_URL = getIntent().getExtras().getString("linkMovie");
         if(VIDEO_URL == null) {
             VIDEO_URL = "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_1920_18MG.mp4";
         }
-
-        Log.e("VIDEO_URL ======= SAU ", VIDEO_URL);
 
         playerView = findViewById(R.id.exo_player);
         simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(this);

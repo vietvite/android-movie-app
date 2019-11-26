@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MovieApp</string>
     <string name="lorem_desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus alias aliquam aperiam, debitis deserunt dicta distinctio harum ipsa natus, nobis nulla odit officiis praesentium quaerat quidem quisquam quod repellendus sequi similique tempore totam velit vero! Cum dolores eaque iste laboriosam quod? Amet aperiam asperiores beatae consectetur culpa error facere hic ipsum iste necessitatibus nostrum, odit officiis quasi quibusdam similique suscipit vero? Libero, obcaecati, voluptatibus? Adipisci asperiores earum fuga temporibus unde voluptas, voluptate! A aliquam aliquid aperiam asperiores assumenda consequatur cupiditate facere libero minima mollitia nemo neque nihil odit officia placeat quae quibusdam reiciendis, saepe totam velit. Aperiam odio ratione ut.</string>
+    <string name="title_activity_bottom_navigation">bottom_navigation</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
