@@ -2,6 +2,7 @@ package com.example.movieapp.ui.home;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,11 +64,56 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         initSlider();
 
         homeViewModel.getMovies().observe(this, lstMovies -> {
-            updateTrendingMovies(lstMovies);
-            updateActionMovies(lstMovies);
+            if(lstMovies == null) {
+                new MovieService().execute();
+            } else {
+                updateTrendingMovies(lstMovies);
+                updateActionMovies(lstMovies);
+            }
         });
 
         return root;
+    }
+
+    class MovieService extends AsyncTask<String, Void, List<Movie>> implements Callback {
+        Moshi moshi = new Moshi.Builder().build();
+        Type movieType = Types.newParameterizedType(List.class, Movie.class);
+        final JsonAdapter<List<Movie>> jsonAdapter = moshi.adapter(movieType);
+
+        List<Movie> movies;
+
+        @Override
+        protected List<Movie> doInBackground(String... strings) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://film-vietvite.herokuapp.com/api/movie/trending")
+                    .build();
+
+            client.newCall(request).enqueue(this);
+            return null;
+        }
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            Log.e("Error", "Network Error");
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            try {
+                String resData = response.body().string();
+                JSONObject jsonObject = new JSONObject(resData);
+                String lstMovieStr = jsonObject.getString("data");
+                movies = jsonAdapter.fromJson(lstMovieStr);
+
+                getActivity().runOnUiThread(() -> {
+                    updateTrendingMovies(movies);
+                    updateActionMovies(movies);
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void updateTrendingMovies(List<Movie> lstMovies) {
