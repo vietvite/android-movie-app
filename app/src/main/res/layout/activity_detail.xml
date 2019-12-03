@@ -12,10 +12,10 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:scaleType="centerCrop"
             android:id="@+id/iv_detail_cover"
             android:layout_width="0dp"
             android:layout_height="250dp"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +25,6 @@
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="50dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_detail_cover"
             app:layout_constraintEnd_toEndOf="@+id/iv_detail_cover"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,24 +48,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="none"
+            android:fontFamily="@font/comfortaa"
             android:scrollHorizontally="false"
             android:text="Movie title"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@+id/textviews1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_detail_thumb"
-            app:layout_constraintTop_toBottomOf="@+id/iv_detail_cover" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_start_play" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="@font/comfortaa_bold"
             android:text="Nội dung"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -79,11 +80,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="@font/comfortaa"
             android:text="@string/lorem_desc"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +101,79 @@
             app:layout_constraintStart_toStartOf="@+id/iv_detail_cover"
             app:layout_constraintTop_toTopOf="@+id/iv_detail_cover"
             app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:progressBackgroundTint="@color/white"
+            android:rating="3.7"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_detail_thumb"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_thumb" />
+
+        <TextView
+            android:id="@+id/textviews1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/comfortaa"
+            android:text="Lượt xem:"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/textview2"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_thumb" />
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/comfortaa"
+            android:text="3.7"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+            app:layout_constraintStart_toEndOf="@+id/ratingBar" />
+
+        <TextView
+            android:id="@+id/tv_views"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/comfortaa"
+            android:text="43.749"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textviews1"
+            app:layout_constraintStart_toEndOf="@+id/textviews1" />
+
+        <TextView
+            android:id="@+id/textview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/comfortaa"
+            android:text="Thời lượng:"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_rating"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_thumb" />
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/comfortaa"
+            android:text="132"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textview2"
+            app:layout_constraintStart_toEndOf="@+id/textview2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -152,9 +152,13 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     public void onMovieClick(Movie movie, ImageView movieThumbnail) {
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra("title", movie.getTitle());
-        intent.putExtra("movieThumb", movie.getThumbnail());
+        intent.putExtra("movieImg", movie.getThumbnail());
         intent.putExtra("desc", movie.getDescription());
         intent.putExtra("linkMovie", movie.getMovieUrl());
+        intent.putExtra("rating", movie.getRating());
+        intent.putExtra("duration", movie.getDuration());
+        intent.putExtra("viewNumber", movie.getViewNumber());
+
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                 getActivity(), movieThumbnail, "movieThumb");
