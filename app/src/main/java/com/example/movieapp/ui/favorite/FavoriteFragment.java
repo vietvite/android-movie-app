@@ -1,4 +1,4 @@
-package com.example.movieapp.ui.notifications;
+package com.example.movieapp.ui.favorite;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.movieapp.R;
 
-public class NotificationsFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private FavoriteViewModel favoriteViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
+        favoriteViewModel =
+                ViewModelProviders.of(this).get(FavoriteViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_favorite, container, false);
+        final TextView textView = root.findViewById(R.id.text_dashboard);
+        favoriteViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
