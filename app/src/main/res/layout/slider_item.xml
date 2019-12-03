@@ -41,12 +41,13 @@
         app:srcCompat="@drawable/bg_gradient" />
 
     <TextView
-        android:textColor="#fff"
-        android:textSize="24sp"
         android:id="@+id/slider_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa_light"
         android:text="TextView"
+        android:textColor="#fff"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintHorizontal_bias="0.13"
