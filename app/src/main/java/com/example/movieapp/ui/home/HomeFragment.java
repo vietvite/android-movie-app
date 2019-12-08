@@ -12,9 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,11 +21,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.movieapp.R;
 import com.example.movieapp.adapters.MovieAdapter;
 import com.example.movieapp.adapters.MovieItemClickListener;
-import com.example.movieapp.adapters.SliderPagerAdapter;
+import com.example.movieapp.adapters.TrendingAdapter;
 import com.example.movieapp.models.Movie;
-import com.example.movieapp.models.Slider;
 import com.example.movieapp.ui.DetailActivity;
-import com.example.movieapp.ui.MainActivity;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -50,10 +46,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     private HomeViewModel homeViewModel;
 
-    private List<Slider> lstSlides;
-    private ViewPager sliderpager;
-    private RecyclerView trendingRv;
-    private RecyclerView list1Rv;
+    private ViewPager vpTrending;
+    private RecyclerView rvSeeMost;
+    private RecyclerView rvAction;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -61,7 +56,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         initView(root);
-        initSlider();
 
         homeViewModel.getMovies().observe(this, lstMovies -> {
             if(lstMovies == null) {
@@ -107,6 +101,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
                 movies = jsonAdapter.fromJson(lstMovieStr);
 
                 getActivity().runOnUiThread(() -> {
+                    initSlider(movies);
                     updateTrendingMovies(movies);
                     updateActionMovies(movies);
                 });
@@ -118,34 +113,29 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     public void updateTrendingMovies(List<Movie> lstMovies) {
         TextView tvTrendingTitle = getActivity().findViewById(R.id.tv_trending_title);
-        tvTrendingTitle.setText("Trending now");
+        tvTrendingTitle.setText("See most");
         MovieAdapter trendingAdapter = new MovieAdapter(getActivity(), lstMovies, this);
-        trendingRv.setAdapter(trendingAdapter);
-        trendingRv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        rvSeeMost.setAdapter(trendingAdapter);
+        rvSeeMost.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
     public void updateActionMovies(List<Movie> lstMovies) {
         TextView tvTrendingTitle = getActivity().findViewById(R.id.tv_list1_title);
         tvTrendingTitle.setText("Hành động");
         MovieAdapter trendingAdapter = new MovieAdapter(getActivity(), lstMovies, this);
-        list1Rv.setAdapter(trendingAdapter);
-        list1Rv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        rvAction.setAdapter(trendingAdapter);
+        rvAction.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
     }
 
-    public void initSlider() {
-        lstSlides = new ArrayList<Slider>();
-        lstSlides.add(new Slider(R.drawable.avengers, "Avengers..."));
-        lstSlides.add(new Slider(R.drawable.hobbit, "Hobbit..."));
-        lstSlides.add(new Slider(R.drawable.inception, "Inception..."));
-
-        SliderPagerAdapter adapter = new SliderPagerAdapter(getActivity(), lstSlides);
-        sliderpager.setAdapter(adapter);
+    public void initSlider(List<Movie> lstTrending) {
+        TrendingAdapter adapter = new TrendingAdapter(getActivity(), lstTrending);
+        vpTrending.setAdapter(adapter);
     }
 
     private void initView(View root) {
-        sliderpager = root.findViewById(R.id.slider_pager);
-        trendingRv = root.findViewById(R.id.Rv_trending);
-        list1Rv = root.findViewById(R.id.Rv_phimle);
+        vpTrending = root.findViewById(R.id.slider_pager);
+        rvSeeMost = root.findViewById(R.id.Rv_trending);
+        rvAction = root.findViewById(R.id.Rv_phimle);
     }
 
     @Override
@@ -155,7 +145,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         intent.putExtra("movieImg", movie.getThumbnail());
         intent.putExtra("desc", movie.getDescription());
         intent.putExtra("linkMovie", movie.getMovieUrl());
-        intent.putExtra("rating", movie.getRating());
+        intent.putExtra("rating", movie.getRate());
         intent.putExtra("duration", movie.getDuration());
         intent.putExtra("viewNumber", movie.getViewNumber());
 

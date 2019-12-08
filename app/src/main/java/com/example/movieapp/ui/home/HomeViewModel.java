@@ -70,6 +70,7 @@ public class HomeViewModel extends ViewModel {
                 String resData = response.body().string();
                 JSONObject jsonObject = new JSONObject(resData);
                 String lstMovieStr = jsonObject.getString("data");
+                Log.e("LOGGGGGG", lstMovieStr);
                 movies = jsonAdapter.fromJson(lstMovieStr);
             } catch (JSONException e) {
                 e.printStackTrace();

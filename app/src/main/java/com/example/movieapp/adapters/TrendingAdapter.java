@@ -13,20 +13,19 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.example.movieapp.R;
-import com.example.movieapp.models.Slider;
-import com.example.movieapp.ui.MainActivity;
+import com.example.movieapp.models.Movie;
 import com.example.movieapp.ui.PlayerActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class SliderPagerAdapter extends PagerAdapter {
+public class TrendingAdapter extends PagerAdapter {
     private Context context;
-    private List<Slider> lstSlides;
+    private List<Movie> lstTrending;
 
-    public SliderPagerAdapter(Context context, List<Slider> mList) {
+    public TrendingAdapter(Context context, List<Movie> mList) {
         this.context = context;
-        this.lstSlides = mList;
+        this.lstTrending = mList;
     }
 
     @NonNull
@@ -37,8 +36,8 @@ public class SliderPagerAdapter extends PagerAdapter {
         TextView slideText = slideLayout.findViewById(R.id.slider_title);
         FloatingActionButton btnPlay = slideLayout.findViewById(R.id.btn_hot_play);
 
-        Glide.with(container).load(lstSlides.get(position).getImage()).into(slideImage);
-        slideText.setText(lstSlides.get(position).getTitle());
+        Glide.with(container).load(lstTrending.get(position).getCoverImg()).into(slideImage);
+        slideText.setText(lstTrending.get(position).getTitle());
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +54,7 @@ public class SliderPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return lstSlides.size();
+        return lstTrending.size();
     }
 
     @Override
