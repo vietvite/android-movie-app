@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         protected List<Movie> doInBackground(String... strings) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("https://film-vietvite.herokuapp.com/api/movie/trending")
+                    .url("https://film-vietvite.herokuapp.com/api/movie")
                     .build();
 
             client.newCall(request).enqueue(this);
