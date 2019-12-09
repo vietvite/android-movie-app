@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/iv_fav_item_movieImg"
-        android:layout_width="75dp"
-        android:layout_height="100dp"
+        android:layout_width="65dp"
+        android:layout_height="90dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -23,24 +23,26 @@
         android:id="@+id/tv_fav_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/comfortaa_bold"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/comfortaa"
         android:text="Tên của bộ phim"
-        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/iv_fav_item_movieImg"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/iv_fav_item_movieImg" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="2dp"
         android:fontFamily="@font/comfortaa"
         android:text="Lượt xem:"
-        app:layout_constraintStart_toEndOf="@+id/iv_fav_item_movieImg"
-        app:layout_constraintTop_toBottomOf="@+id/tv_fav_item_title" />
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/fav_item_ratingBar"
+        app:layout_constraintStart_toEndOf="@+id/iv_fav_item_movieImg" />
 
     <TextView
         android:id="@+id/tv_fav_item_views"
@@ -49,6 +51,8 @@
         android:layout_marginStart="8dp"
         android:fontFamily="@font/comfortaa"
         android:text="567.935"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toEndOf="@+id/textView5" />
 
@@ -57,10 +61,10 @@
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/iv_fav_item_movieImg"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_fav_item_movieImg" />
 
     <TextView
         android:id="@+id/tv_fav_item_rating"
@@ -69,8 +73,17 @@
         android:layout_marginStart="8dp"
         android:fontFamily="@font/comfortaa"
         android:text="4.7"
+        android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/fav_item_ratingBar"
         app:layout_constraintStart_toEndOf="@+id/fav_item_ratingBar" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        app:srcCompat="@drawable/ic_favorite_black_24dp"
+        tools:layout_editor_absoluteX="353dp"
+        tools:layout_editor_absoluteY="30dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

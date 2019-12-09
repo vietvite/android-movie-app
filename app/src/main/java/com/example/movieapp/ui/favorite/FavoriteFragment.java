@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieapp.R;
@@ -55,59 +56,59 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
                 initFav(lstFavs);
             } else {
                 Log.e("VO MOVIESERVICE", "NOT VO INIT");
-                new MovieService().execute();
+//                new MovieService().execute();
             }
         });
 
         return root;
     }
 
-    class MovieService extends AsyncTask<String, Void, List<Movie>> implements Callback {
-        Moshi moshi = new Moshi.Builder().build();
-        Type movieType = Types.newParameterizedType(List.class, Movie.class);
-        final JsonAdapter<List<Movie>> jsonAdapter = moshi.adapter(movieType);
-
-        List<Movie> movies;
-
-        @Override
-        protected List<Movie> doInBackground(String... strings) {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url("https://film-vietvite.herokuapp.com/api/movie/trending")
-                    .build();
-
-            client.newCall(request).enqueue(this);
-            return null;
-        }
-
-        @Override
-        public void onFailure(Call call, IOException e) {
-            Log.e("Error", "Network Error");
-        }
-
-        @Override
-        public void onResponse(Call call, Response response) throws IOException {
-            try {
-                String resData = response.body().string();
-                JSONObject jsonObject = new JSONObject(resData);
-                String lstMovieStr = jsonObject.getString("data");
-                movies = jsonAdapter.fromJson(lstMovieStr);
-
-                Log.e("lstMovieStr", lstMovieStr);
-                getActivity().runOnUiThread(() -> {
-                    initFav(movies);
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    class MovieService extends AsyncTask<String, Void, List<Movie>> implements Callback {
+//        Moshi moshi = new Moshi.Builder().build();
+//        Type movieType = Types.newParameterizedType(List.class, Movie.class);
+//        final JsonAdapter<List<Movie>> jsonAdapter = moshi.adapter(movieType);
+//
+//        List<Movie> movies;
+//
+//        @Override
+//        protected List<Movie> doInBackground(String... strings) {
+//            OkHttpClient client = new OkHttpClient();
+//            Request request = new Request.Builder()
+//                    .url("https://film-vietvite.herokuapp.com/api/movie")
+//                    .build();
+//
+//            client.newCall(request).enqueue(this);
+//            return null;
+//        }
+//
+//        @Override
+//        public void onFailure(Call call, IOException e) {
+//            Log.e("Error", "Network Error");
+//        }
+//
+//        @Override
+//        public void onResponse(Call call, Response response) throws IOException {
+//            try {
+//                String resData = response.body().string();
+//                JSONObject jsonObject = new JSONObject(resData);
+//                String lstMovieStr = jsonObject.getString("data");
+//                movies = jsonAdapter.fromJson(lstMovieStr);
+//
+//                Log.e("lstMovieStr", lstMovieStr);
+//                getActivity().runOnUiThread(() -> {
+//                    initFav(movies);
+//                });
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     private void initFav(List<Movie> lstFavorite) {
         Log.e("++++++ TITLE +++++", lstFavorite.get(0).getTitle());
-        favAdapter = new FavoriteAdapter(lstFavorite);
+        favAdapter = new FavoriteAdapter(getActivity(),lstFavorite, this);
         rvFav.setAdapter(favAdapter);
-//        rvFav.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        rvFav.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
     }
 
     @Override

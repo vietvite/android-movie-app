@@ -1,5 +1,6 @@
 package com.example.movieapp.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,12 @@ import java.util.List;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavViewHolder> {
 
+    Context mContext;
     List<Movie> lstMovies;
     MovieItemClickListener movieItemClickListener;
 
-    public FavoriteAdapter(List<Movie> lstMovies) {
-        this.lstMovies = lstMovies;
-    }
-
-    public FavoriteAdapter(List<Movie> lstMovies, MovieItemClickListener movieItemClickListener) {
+    public FavoriteAdapter(Context mContext, List<Movie> lstMovies, MovieItemClickListener movieItemClickListener) {
+        this.mContext = mContext;
         this.lstMovies = lstMovies;
         this.movieItemClickListener = movieItemClickListener;
     }
@@ -33,7 +32,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavVie
     @NonNull
     @Override
     public FavViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fav_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.fav_item, parent, false);
         return new FavViewHolder(view);
     }
 
