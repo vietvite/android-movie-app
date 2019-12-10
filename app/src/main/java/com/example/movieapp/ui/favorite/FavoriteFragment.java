@@ -1,5 +1,7 @@
 package com.example.movieapp.ui.favorite;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,20 +19,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.movieapp.R;
 import com.example.movieapp.adapters.FavoriteAdapter;
 import com.example.movieapp.adapters.MovieItemClickListener;
+import com.example.movieapp.commons.Parser;
 import com.example.movieapp.models.Movie;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Types;
+import com.example.movieapp.ui.DetailActivity;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -52,60 +52,58 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
 
         favoriteViewModel.getListFavorites().observe(this, lstFavs -> {
             if(lstFavs != null) {
-                Log.e("VO THANG INIT LUON NE", "HIHI");
+                Log.e("KOOOOOOOOOOOOOOOOOO", "HIHI");
                 initFav(lstFavs);
             } else {
-                Log.e("VO MOVIESERVICE", "NOT VO INIT");
-//                new MovieService().execute();
+                Log.e("OKKKKKKKKKKKKKKKKKK", "NOT VO INIT");
+                new MovieService().execute();
             }
         });
 
         return root;
     }
 
-//    class MovieService extends AsyncTask<String, Void, List<Movie>> implements Callback {
-//        Moshi moshi = new Moshi.Builder().build();
-//        Type movieType = Types.newParameterizedType(List.class, Movie.class);
-//        final JsonAdapter<List<Movie>> jsonAdapter = moshi.adapter(movieType);
-//
-//        List<Movie> movies;
-//
-//        @Override
-//        protected List<Movie> doInBackground(String... strings) {
-//            OkHttpClient client = new OkHttpClient();
-//            Request request = new Request.Builder()
-//                    .url("https://film-vietvite.herokuapp.com/api/movie")
-//                    .build();
-//
-//            client.newCall(request).enqueue(this);
-//            return null;
-//        }
-//
-//        @Override
-//        public void onFailure(Call call, IOException e) {
-//            Log.e("Error", "Network Error");
-//        }
-//
-//        @Override
-//        public void onResponse(Call call, Response response) throws IOException {
-//            try {
-//                String resData = response.body().string();
-//                JSONObject jsonObject = new JSONObject(resData);
-//                String lstMovieStr = jsonObject.getString("data");
-//                movies = jsonAdapter.fromJson(lstMovieStr);
-//
-//                Log.e("lstMovieStr", lstMovieStr);
-//                getActivity().runOnUiThread(() -> {
-//                    initFav(movies);
-//                });
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    class MovieService extends AsyncTask<String, Void, List<Movie>> implements Callback {
+        List<Movie> movies;
+
+        @Override
+        protected List<Movie> doInBackground(String... strings) {
+            OkHttpClient client = new OkHttpClient();
+
+            HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/favorite").newBuilder();
+            urlBuilder.addPathSegment("5def5b80c2bd5c8b261e9e8e");
+            String url = urlBuilder.build().toString();
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            client.newCall(request).enqueue(this);
+            return null;
+        }
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            Log.e("Error", "Network Error");
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) {
+            try {
+                String resData = response.body().string();
+                JSONObject o = new JSONObject(resData);
+                String favStr = o.getString("favorite");
+                Log.e("favStr", favStr);
+                movies = Parser.parseListMovie(favStr);
+
+                getActivity().runOnUiThread(() -> initFav(movies));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void initFav(List<Movie> lstFavorite) {
-        Log.e("++++++ TITLE +++++", lstFavorite.get(0).getTitle());
         favAdapter = new FavoriteAdapter(getActivity(),lstFavorite, this);
         rvFav.setAdapter(favAdapter);
         rvFav.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -113,6 +111,19 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
 
     @Override
     public void onMovieClick(Movie movie, ImageView movieThumbnail) {
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("title", movie.getTitle());
+        intent.putExtra("movieImg", movie.getThumbnail());
+        intent.putExtra("desc", movie.getDescription());
+        intent.putExtra("linkMovie", movie.getMovieUrl());
+        intent.putExtra("rating", movie.getRate());
+        intent.putExtra("duration", movie.getDuration());
+        intent.putExtra("viewNumber", movie.getViewNumber());
 
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                getActivity(), movieThumbnail, "movieThumb");
+
+        startActivity(intent, options.toBundle());
     }
 }
