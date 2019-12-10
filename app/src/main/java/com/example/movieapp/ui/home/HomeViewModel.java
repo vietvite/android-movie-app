@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.movieapp.commons.Parser;
 import com.example.movieapp.models.Movie;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -28,20 +29,46 @@ import okhttp3.Response;
 
 public class HomeViewModel extends ViewModel {
 
-    static List<Movie> movies = null;
-    public MutableLiveData<List<Movie>> lstMovies;
+
+    static List<Movie> trending = null;
+    static List<Movie> seeMost = null;
+    static List<Movie> action = null;
+
+    public MutableLiveData<List<Movie>> lstTrending;
+    public MutableLiveData<List<Movie>> lstSeeMost;
+    public MutableLiveData<List<Movie>> lstAction;
+
 
     public HomeViewModel() {
-        lstMovies = new MutableLiveData<>();
+        lstTrending = new MutableLiveData<>();
+        lstSeeMost = new MutableLiveData<>();
+        lstAction = new MutableLiveData<>();
     }
 
-    public LiveData<List<Movie>> getMovies() {
-        if(movies == null) {
+    public LiveData<List<Movie>> getTrending() {
+        if(trending == null) {
             new MovieService().execute();
         }
-        lstMovies.setValue(movies);
-        return lstMovies;
+        lstTrending.setValue(trending);
+        return lstTrending;
     }
+
+    public LiveData<List<Movie>> getSeeMost() {
+        if(seeMost == null) {
+            new MovieService().execute();
+        }
+        lstSeeMost.setValue(seeMost);
+        return lstSeeMost;
+    }
+
+    public LiveData<List<Movie>> getAction() {
+        if(action == null) {
+            new MovieService().execute();
+        }
+        lstAction.setValue(action);
+        return lstAction;
+    }
+
 
     class MovieService extends AsyncTask<String, Void, ArrayList<Movie>> implements Callback {
         Moshi moshi = new Moshi.Builder().build();
@@ -69,9 +96,15 @@ public class HomeViewModel extends ViewModel {
             try {
                 String resData = response.body().string();
                 JSONObject jsonObject = new JSONObject(resData);
-                String lstMovieStr = jsonObject.getString("data");
-                Log.e("LOGGGGGG", lstMovieStr);
-                movies = jsonAdapter.fromJson(lstMovieStr);
+
+                String trendingStr = jsonObject.getString("trending");
+                String seeMostStr = jsonObject.getString("seeMost");
+                String actionStr = jsonObject.getString("action");
+
+                trending = Parser.parseListMovie(trendingStr);
+                seeMost = Parser.parseListMovie(seeMostStr);
+                action = Parser.parseListMovie(actionStr);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

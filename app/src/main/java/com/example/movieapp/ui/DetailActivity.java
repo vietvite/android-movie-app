@@ -3,10 +3,13 @@ package com.example.movieapp.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -16,7 +19,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.movieapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
+
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -29,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvRating;
     TextView tvDuration;
     RatingBar ratingBar;
+    ImageButton ibFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +66,9 @@ public class DetailActivity extends AppCompatActivity {
         tvDuration = findViewById(R.id.tv_duration);
         tvRating = findViewById(R.id.tv_rating);
         ratingBar = findViewById(R.id.ratingBar);
+        ibFav = findViewById(R.id.btn_fav_border);
 
+        String movieId = getIntent().getExtras().getString("movieId");
         String movieImg = getIntent().getExtras().getString("movieImg");
         String movieTitle = getIntent().getExtras().getString("title");
         String movieDesc = getIntent().getExtras().getString("desc");
@@ -84,5 +98,46 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(mIntent);
             }
         });
+
+        ibFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UpdateFavorite().execute(movieId);
+            }
+        });
+    }
+
+    public class UpdateFavorite extends AsyncTask<String, Void, Void> implements Callback {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            OkHttpClient client = new OkHttpClient();
+
+            HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/favorite").newBuilder();
+
+//            TODO: Implement SharedPreferences to get userId
+            urlBuilder.addPathSegment("add");
+            urlBuilder.addPathSegment("5def5b80c2bd5c8b261e9e8e"); // userId
+            urlBuilder.addPathSegment(strings[0]); // movieId
+            String url = urlBuilder.build().toString();
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            client.newCall(request).enqueue(this);
+            return null;
+        }
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            Log.e("Error", "Network Error");
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            String resData = response.body().string();
+            Log.i("asd", resData);
+        }
     }
 }

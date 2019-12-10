@@ -22,18 +22,14 @@ import com.example.movieapp.R;
 import com.example.movieapp.adapters.MovieAdapter;
 import com.example.movieapp.adapters.MovieItemClickListener;
 import com.example.movieapp.adapters.TrendingAdapter;
+import com.example.movieapp.commons.Parser;
 import com.example.movieapp.models.Movie;
 import com.example.movieapp.ui.DetailActivity;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Types;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -57,24 +53,35 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
         initView(root);
 
-        homeViewModel.getMovies().observe(this, lstMovies -> {
-            if(lstMovies == null) {
+        homeViewModel.getTrending().observe(this, lstTrending -> {
+            if(lstTrending == null) {
                 new MovieService().execute();
             } else {
-                updateTrendingMovies(lstMovies);
-                updateActionMovies(lstMovies);
+                initSlider(lstTrending);
             }
         });
+
+        homeViewModel.getSeeMost().observe(this, lstSeeMost -> {
+            if(lstSeeMost == null) {
+                new MovieService().execute();
+            } else {
+                updateSeeMostMovies(lstSeeMost);
+            }
+        });
+
+        homeViewModel.getAction().observe(this, lstAction -> {
+            if(lstAction == null) {
+                new MovieService().execute();
+            } else {
+                updateActionMovies(lstAction);
+            }
+        });
+
 
         return root;
     }
 
     class MovieService extends AsyncTask<String, Void, List<Movie>> implements Callback {
-        Moshi moshi = new Moshi.Builder().build();
-        Type movieType = Types.newParameterizedType(List.class, Movie.class);
-        final JsonAdapter<List<Movie>> jsonAdapter = moshi.adapter(movieType);
-
-        List<Movie> movies;
 
         @Override
         protected List<Movie> doInBackground(String... strings) {
@@ -97,13 +104,19 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
             try {
                 String resData = response.body().string();
                 JSONObject jsonObject = new JSONObject(resData);
-                String lstMovieStr = jsonObject.getString("data");
-                movies = jsonAdapter.fromJson(lstMovieStr);
+
+                String trending = jsonObject.getString("trending");
+                String seeMost = jsonObject.getString("seeMost");
+                String action = jsonObject.getString("action");
+
+                List<Movie> lstTrending = Parser.parseListMovie(trending);
+                List<Movie> lstSeeMost = Parser.parseListMovie(seeMost);
+                List<Movie> lstAction = Parser.parseListMovie(action);
 
                 getActivity().runOnUiThread(() -> {
-                    initSlider(movies);
-                    updateTrendingMovies(movies);
-                    updateActionMovies(movies);
+                    initSlider(lstTrending);
+                    updateSeeMostMovies(lstSeeMost);
+                    updateActionMovies(lstAction);
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -111,7 +124,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         }
     }
 
-    public void updateTrendingMovies(List<Movie> lstMovies) {
+    public void updateSeeMostMovies(List<Movie> lstMovies) {
         TextView tvTrendingTitle = getActivity().findViewById(R.id.tv_trending_title);
         tvTrendingTitle.setText("See most");
         MovieAdapter trendingAdapter = new MovieAdapter(getActivity(), lstMovies, this);
@@ -141,6 +154,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
     @Override
     public void onMovieClick(Movie movie, ImageView movieThumbnail) {
         Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("movieId", movie.get_id());
         intent.putExtra("title", movie.getTitle());
         intent.putExtra("movieImg", movie.getThumbnail());
         intent.putExtra("desc", movie.getDescription());
