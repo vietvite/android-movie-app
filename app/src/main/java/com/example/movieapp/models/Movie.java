@@ -15,7 +15,7 @@ public class Movie {
     private String releaseDate;
     private long viewNumber;
     private String movieUrl;
-    private List<Comment> comments;
+    private transient List<Comment> comment;
     private String coverImg;
 
     public Movie(String title, String thumbnail) {
@@ -54,12 +54,12 @@ public class Movie {
         this.coverImg = coverImg;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Comment> getComment() {
+        return comment;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setComment(List<Comment> comment) {
+        this.comment = comment;
     }
 
     public String getTitle() {

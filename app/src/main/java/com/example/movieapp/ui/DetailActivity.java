@@ -106,7 +106,7 @@ public class DetailActivity extends AppCompatActivity {
 
         tvComment.setOnClickListener(v -> {
             Intent mIntent = new Intent(DetailActivity.this, CommentActivity.class);
-//            mIntent.putExtra("linkMovie", linkMovie);
+            mIntent.putExtra("movieId", movieId);
             startActivity(mIntent);
         });
 

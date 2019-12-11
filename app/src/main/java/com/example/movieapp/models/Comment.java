@@ -6,6 +6,11 @@ public class Comment {
     private String date;
     private String comment;
 
+    public Comment(String username, String comment) {
+        this.username = username;
+        this.comment = comment;
+    }
+
     public Comment(String _id, String username, String date, String comment) {
         this._id = _id;
         this.username = username;
