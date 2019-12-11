@@ -1,9 +1,11 @@
 package com.example.movieapp.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.movieapp.R;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -42,6 +44,19 @@ public class PlayerActivity extends AppCompatActivity {
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(VIDEO_URL));
         simpleExoPlayer.prepare(videoSource);
         simpleExoPlayer.setPlayWhenReady(true);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("exoPosition", simpleExoPlayer.getCurrentPosition());
+        Log.e("exoPosition", String.valueOf(simpleExoPlayer.getCurrentPosition()));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        simpleExoPlayer.seekTo(savedInstanceState.getLong("exoPosition"));
     }
 
     @Override
