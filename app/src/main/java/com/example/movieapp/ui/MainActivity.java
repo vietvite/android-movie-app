@@ -32,5 +32,6 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().setLogo(R.drawable.ic_movie_filter_black_24dp);
 //        getSupportActionBar().setDisplayUseLogoEnabled(true);
 //        setTitle("RiceFilm");
+        getSupportActionBar().hide();
     }
 }

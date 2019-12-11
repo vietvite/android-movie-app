@@ -27,7 +27,9 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-//        VIDEO_URL = getIntent().getExtras().getString("linkMovie");
+        getSupportActionBar().hide();
+
+        VIDEO_URL = getIntent().getExtras().getString("linkMovie");
         if(VIDEO_URL == null) {
             VIDEO_URL = "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_1920_18MG.mp4";
         }

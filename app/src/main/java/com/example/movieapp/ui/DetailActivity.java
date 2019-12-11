@@ -54,6 +54,8 @@ public class DetailActivity extends AppCompatActivity {
                     .setInterpolator(new DecelerateInterpolator());
         }
 
+        getSupportActionBar().hide();
+
         initView();
     }
 
