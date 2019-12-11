@@ -39,13 +39,10 @@ public class TrendingAdapter extends PagerAdapter {
         Glide.with(container).load(lstTrending.get(position).getCoverImg()).into(slideImage);
         slideText.setText(lstTrending.get(position).getTitle());
 
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(context, PlayerActivity.class);
-                mIntent.putExtra("linkMovie", "https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_1920_18MG.mp4");
-                context.startActivity(mIntent);
-            }
+        btnPlay.setOnClickListener(v -> {
+            Intent mIntent = new Intent(context, PlayerActivity.class);
+            mIntent.putExtra("linkMovie", lstTrending.get(position).getMovieUrl());
+            context.startActivity(mIntent);
         });
 
         container.addView(slideLayout);
