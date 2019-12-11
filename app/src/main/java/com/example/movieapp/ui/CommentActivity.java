@@ -17,6 +17,7 @@ import com.example.movieapp.R;
 import com.example.movieapp.adapters.CommentAdapter;
 import com.example.movieapp.commons.Parser;
 import com.example.movieapp.models.Comment;
+import com.example.movieapp.ui.dialog.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +44,7 @@ public class CommentActivity extends AppCompatActivity {
     RecyclerView rvComment;
     EditText etComment;
     Button btnPostComment;
+    LoadingDialog loadingDialog;
 
     static String movieId;
 
@@ -56,6 +58,8 @@ public class CommentActivity extends AppCompatActivity {
         rvComment = findViewById(R.id.rv_comment);
         etComment = findViewById(R.id.tb_edit_comment);
         btnPostComment = findViewById(R.id.btn_send_comment);
+
+        loadingDialog = new LoadingDialog(this);
 
         SharedPreferences sharedPrefs = getSharedPreferences("user", MODE_PRIVATE);
 
@@ -149,6 +153,12 @@ public class CommentActivity extends AppCompatActivity {
     class FetchCommentService extends AsyncTask<String, Void, List<Comment>> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.show();
+        }
+
+        @Override
         protected List<Comment> doInBackground(String... strings) {
             OkHttpClient client = new OkHttpClient();
             HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/comment").newBuilder();
@@ -178,13 +188,14 @@ public class CommentActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Comment> comments) {
             super.onPostExecute(comments);
-            runOnUiThread(() -> {
-                if(comments != null && comments.size() != 0) {
-                    initFav(comments);
-                } else {
-                    Toast.makeText(CommentActivity.this, "Hãy là người đầu tiên comment", Toast.LENGTH_SHORT);
-                }
-            });
+            loadingDialog.dismiss();
+            if(comments != null && comments.size() != 0) {
+                initFav(comments);
+            } else {
+                Toast.makeText(CommentActivity.this, "Hãy là người đầu tiên comment", Toast.LENGTH_SHORT);
+            }
+//            runOnUiThread(() -> {
+//            });
 
         }
     }
