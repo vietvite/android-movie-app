@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -99,12 +100,15 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        ibFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new UpdateFavorite().execute(movieId);
-            }
-        });
+        ((ImageButton) ibFav).setBackgroundResource(R.drawable.ic_favorite_border_pink_24dp);
+
+        View.OnClickListener favClickHander = v -> {
+            ((ImageButton) ibFav).setBackgroundResource(R.drawable.ic_favorite_solid_pink_24dp);
+            new UpdateFavorite().execute(movieId);
+            Toast.makeText(DetailActivity.this, "Added to you favorite", Toast.LENGTH_SHORT).show();
+        };
+
+        ibFav.setOnClickListener(favClickHander);
     }
 
     public class UpdateFavorite extends AsyncTask<String, Void, Void> implements Callback {

@@ -5,4 +5,6 @@
     <string name="title_home">Home</string>
     <string name="title_favorite">Favorites</string>
     <string name="title_community">Community</string>
+    <string name="passwordText">Password</string>
+    <string name="emailText">Email</string>
 </resources>

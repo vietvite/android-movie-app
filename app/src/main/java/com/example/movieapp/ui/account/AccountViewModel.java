@@ -1,14 +1,14 @@
-package com.example.movieapp.ui.community;
+package com.example.movieapp.ui.account;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class CommunityViewModel extends ViewModel {
+public class AccountViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public CommunityViewModel() {
+    public AccountViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
     }

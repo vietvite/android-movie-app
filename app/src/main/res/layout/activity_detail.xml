@@ -183,8 +183,7 @@
             android:layout_marginEnd="32dp"
             android:backgroundTint="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_views"
-            app:srcCompat="@drawable/ic_favorite_border_pink_24dp" />
+            app:layout_constraintTop_toTopOf="@+id/tv_views" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

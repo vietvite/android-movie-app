@@ -7,7 +7,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_login_dark">
 
         <ImageView
             android:id="@+id/imageView"
@@ -23,53 +24,82 @@
         <EditText
             android:id="@+id/tvEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="36dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/background_input_dark"
+            android:drawableLeft="@drawable/ic_mail_black_24dp"
+            android:drawablePadding="16dp"
             android:ems="10"
-            android:hint="Enter Email"
+            android:fontFamily="@font/comfortaa_light"
+            android:hint="@string/emailText"
             android:inputType="textEmailAddress"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            tools:layout_editor_absoluteX="98dp" />
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/textMuted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <EditText
             android:id="@+id/tvPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="36dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/background_input_dark"
+            android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
+            android:drawablePadding="16dp"
             android:ems="10"
-            android:hint="Enter Password"
+            android:fontFamily="@font/comfortaa_light"
+            android:hint="@string/passwordText"
             android:inputType="textPassword"
-            app:layout_constraintTop_toBottomOf="@+id/tvEmail"
-            tools:layout_editor_absoluteX="98dp" />
+            android:lineHeight="48dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/textMuted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
         <Button
             android:id="@+id/btnLogin"
-            android:layout_width="112dp"
-            android:layout_height="46dp"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="80dp"
+            android:background="@drawable/button_background_dark"
+            android:fontFamily="@font/comfortaa"
             android:onClick="loginClick"
             android:text="Login"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPassword"
-            app:layout_constraintVertical_bias="0.121" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
-            android:text="Dont have account yet ? Click "
-            app:layout_constraintBottom_toBottomOf="parent"
+        <Button
+            android:id="@+id/btnSignup"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="80dp"
+            android:background="@drawable/button_border_dark"
+            android:fontFamily="@font/comfortaa"
+            android:onClick="loginClick"
+            android:text="Signup"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
