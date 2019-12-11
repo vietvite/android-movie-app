@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private Button btnSignup;
 
+    SharedPreferences sp;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -47,43 +52,35 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup = findViewById(R.id.btnSignup);
 
         btnLogin.setOnClickListener(v -> login());
+        sp = getSharedPreferences("user", MODE_PRIVATE);
 
     }
 
     private void login() {
         Log.d(TAG,"login");
-//        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+        if (!validate()) {
+            onLoginFailed();
+            return;
+        }
 
         btnLogin.setEnabled(false);
-        btnLogin.setText("Checking");
+        btnLogin.setText("Logging");
         btnSignup.setEnabled(false);
 
         String email = tvEmail.getText().toString();
         String password = tvPassword.getText().toString();
 
-        new UserService().execute("viet@gmail.com", "zzzz");
-//        new android.os.Handler().postDelayed(
-//                new Runnable() {
-//                    public void run() {
-//                        // On complete call either onLoginSuccess or onLoginFailed
-//                        onLoginSuccess();
-//                        // onLoginFailed();
-////                        progressDialog.dismiss();
-//                    }
-//                }, 5000);
+        new UserService().execute(email, password);
     }
 
     public void onLoginSuccess() {
         btnLogin.setEnabled(true);
-        Toast.makeText(getBaseContext(), "Đăng nhập thành công", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Đăng nhập thành công", Toast.LENGTH_LONG).show();
         finish();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Đăng nhập không thành công", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Đăng nhập không thành công", Toast.LENGTH_LONG).show();
 
         btnLogin.setEnabled(true);
     }
@@ -118,8 +115,6 @@ public class LoginActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
 
             HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/login").newBuilder();
-//            urlBuilder.encodedUsername(strings[0]);
-//            urlBuilder.encodedPassword(strings[1]);
 
             String url = urlBuilder.build().toString();
             Log.e("url", url);
@@ -151,18 +146,23 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call call, Response response) throws IOException {
             String rawStr = response.body().string();
-            User user = Parser.parseUser(rawStr);
 
-            SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
-            SharedPreferences.Editor edit = sp.edit();
+            if(rawStr.equalsIgnoreCase("true")) {
+                User user = Parser.parseUser(rawStr);
 
-            edit.putString("userId", user.get_id());
-            edit.putString("email", user.getEmail());
-            edit.putBoolean("logged", true);
-            edit.putString("rawStr", rawStr);
-            edit.apply();
 
-//            getSupportFragmentManager().findFragmentById(R.id.navigation_home)
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("userId", user.get_id());
+                edit.putString("email", user.getEmail());
+                edit.putBoolean("logged", true);
+                edit.putString("rawStr", rawStr);
+                edit.apply();
+
+//                TODO: call home fragment
+
+            } else {
+//                TODO: Login failed handle
+            }
         }
     }
 }
