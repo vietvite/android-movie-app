@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
     public void updateSeeMostMovies(List<Movie> lstMovies) {
         TextView tvTrendingTitle = getActivity().findViewById(R.id.tv_trending_title);
-        tvTrendingTitle.setText("See most");
+        tvTrendingTitle.setText("Đề xuất");
         MovieAdapter trendingAdapter = new MovieAdapter(getActivity(), lstMovies, this);
         rvSeeMost.setAdapter(trendingAdapter);
         rvSeeMost.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -162,7 +162,6 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
         intent.putExtra("rating", movie.getRate());
         intent.putExtra("duration", movie.getDuration());
         intent.putExtra("viewNumber", movie.getViewNumber());
-
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                 getActivity(), movieThumbnail, "movieThumb");

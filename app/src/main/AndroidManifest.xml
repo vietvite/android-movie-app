@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.CommentActivity"></activity>
         <activity android:name=".ui.DetailActivity" />
         <activity android:name=".ui.PlayerActivity" />
         <activity android:name=".ui.MainActivity">

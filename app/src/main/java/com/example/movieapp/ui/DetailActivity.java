@@ -42,6 +42,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvDuration;
     RatingBar ratingBar;
     ImageButton ibFav;
+    TextView tvComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         tvRating = findViewById(R.id.tv_rating);
         ratingBar = findViewById(R.id.ratingBar);
         ibFav = findViewById(R.id.btn_fav_border);
+        tvComment = findViewById(R.id.btn_comment);
 
         String movieId = getIntent().getExtras().getString("movieId");
         String movieImg = getIntent().getExtras().getString("movieImg");
@@ -100,6 +102,12 @@ public class DetailActivity extends AppCompatActivity {
                 mIntent.putExtra("linkMovie", linkMovie);
                 startActivity(mIntent);
             }
+        });
+
+        tvComment.setOnClickListener(v -> {
+            Intent mIntent = new Intent(DetailActivity.this, CommentActivity.class);
+//            mIntent.putExtra("linkMovie", linkMovie);
+            startActivity(mIntent);
         });
 
         ((ImageButton) ibFav).setBackgroundResource(R.drawable.ic_favorite_border_pink_24dp);
