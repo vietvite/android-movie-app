@@ -65,6 +65,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavVie
             ratingBar = itemView.findViewById(R.id.fav_item_ratingBar);
 
             itemView.setOnClickListener(v -> movieItemClickListener.onMovieClick(lstMovies.get(getAdapterPosition()), ivMovieImg));
+            itemView.setOnLongClickListener(v -> movieItemClickListener.onMovileLongClick((lstMovies.get(getAdapterPosition()))));
         }
     }
 }

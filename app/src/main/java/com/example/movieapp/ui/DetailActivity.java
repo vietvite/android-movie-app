@@ -3,6 +3,7 @@ package com.example.movieapp.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -110,15 +111,13 @@ public class DetailActivity extends AppCompatActivity {
             startActivity(mIntent);
         });
 
-        ((ImageButton) ibFav).setBackgroundResource(R.drawable.ic_favorite_border_pink_24dp);
 
-        View.OnClickListener favClickHander = v -> {
-            ((ImageButton) ibFav).setBackgroundResource(R.drawable.ic_favorite_solid_pink_24dp);
-            new UpdateFavorite().execute(movieId);
-            Toast.makeText(DetailActivity.this, "Added to you favorite", Toast.LENGTH_SHORT).show();
-        };
+    }
 
-        ibFav.setOnClickListener(favClickHander);
+    public void btnFavClick(View view) {
+        String movieId = getIntent().getExtras().getString("movieId");
+        new UpdateFavorite().execute(movieId);
+        Toast.makeText(DetailActivity.this, "Added to you favorite", Toast.LENGTH_SHORT).show();
     }
 
     public class UpdateFavorite extends AsyncTask<String, Void, Void> implements Callback {
@@ -126,14 +125,16 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... strings) {
             OkHttpClient client = new OkHttpClient();
-
+            SharedPreferences sharedPrefs = getSharedPreferences("user", MODE_PRIVATE);
             HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/favorite").newBuilder();
 
-//            TODO: Implement SharedPreferences to get userId
             urlBuilder.addPathSegment("add");
-            urlBuilder.addPathSegment("5def5b80c2bd5c8b261e9e8e"); // userId
+            urlBuilder.addPathSegment(sharedPrefs.getString("userId","123")); // userId
             urlBuilder.addPathSegment(strings[0]); // movieId
             String url = urlBuilder.build().toString();
+
+
+
 
             Request request = new Request.Builder()
                     .url(url)

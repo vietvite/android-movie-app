@@ -177,6 +177,7 @@
         <ImageButton
             android:id="@+id/btn_fav_border"
             android:layout_width="44dp"
+            android:onClick="btnFavClick"
             android:layout_height="38dp"
             android:layout_marginEnd="32dp"
             android:backgroundTint="@android:color/transparent"

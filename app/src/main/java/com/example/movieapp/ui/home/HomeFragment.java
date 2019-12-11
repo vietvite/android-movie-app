@@ -168,4 +168,9 @@ public class HomeFragment extends Fragment implements MovieItemClickListener {
 
         startActivity(intent, options.toBundle());
     }
+
+    @Override
+    public boolean onMovileLongClick(Movie movie) {
+        return false;
+    }
 }
