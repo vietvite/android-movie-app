@@ -1,9 +1,11 @@
 package com.example.movieapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +22,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -51,34 +57,30 @@ public class CommentActivity extends AppCompatActivity {
         etComment = findViewById(R.id.tb_edit_comment);
         btnPostComment = findViewById(R.id.btn_send_comment);
 
+        SharedPreferences sharedPrefs = getSharedPreferences("user", MODE_PRIVATE);
+
         btnPostComment.setOnClickListener(v -> {
-            btnPostComment.setEnabled(false);
 //            TODO: get username from sharedPreference
-            String username = "Viet";
+            String email = sharedPrefs.getString("email","");
+            if(email.equalsIgnoreCase("")) {
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), "Đăng nhập để bình luận", Toast.LENGTH_LONG).show();
+                });
+                return;
+            }
+
+            String username = email.split("[@]")[0];
             String comment = etComment.getText().toString();
+            btnPostComment.setEnabled(false);
             new PostCommentService().execute(new Comment(username, comment));
             etComment.setText("Posting...");
             etComment.setEnabled(false);
 
         });
 
-//        TODO: fetch movie's comments from API
-//        lstComments = new ArrayList<>();
-//        lstComments.add(new Comment("asd", "Viet", "08/12/2019", "Such a nice movie. Love it"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-//        lstComments.add(new Comment("asdasd", "Thanh", "08/12/2019", "This is comment of the movie. This is the movie I love most. Oh I love this so much. Do you know, sister?"));
-
 
         movieId = getIntent().getExtras().getString("movieId");
         new FetchCommentService().execute(movieId);
-
-//        initFav(lstComments);
     }
 
     class PostCommentService extends AsyncTask<Comment, Void, Comment> {
@@ -92,7 +94,6 @@ public class CommentActivity extends AppCompatActivity {
 
             String url = urlBuilder.build().toString();
             Log.e("url", url);
-
 
             RequestBody formBody = new FormBody.Builder()
                     .add("comment", comments[0].getComment())
@@ -126,16 +127,20 @@ public class CommentActivity extends AppCompatActivity {
             super.onPostExecute(comment);
             CommentActivity.this.runOnUiThread(() -> {
                 if(lstComments == null) {
-                    Log.e("lstComments", "DANG nullll");
                     lstComments = new ArrayList<>();
                 }
+
+//                Update temporary date used for ui
+                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+                comment.setDate(formatter.format(new Date()));
+
                 lstComments.add(comment);
-                Log.e("lstComments.get(0", lstComments.get(0).getComment());
-//                initFav(lstComments);
+                initFav(lstComments);
+                rvComment.scrollToPosition(lstComments.size() - 1);
+
                 btnPostComment.setEnabled(true);
                 etComment.setText("");
                 etComment.setEnabled(true);
-                Toast.makeText(CommentActivity.this, "Đã đăng bình luận", Toast.LENGTH_SHORT);
 
             });
         }
