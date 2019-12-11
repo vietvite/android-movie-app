@@ -52,10 +52,8 @@ public class FavoriteFragment extends Fragment implements MovieItemClickListener
 
         favoriteViewModel.getListFavorites().observe(this, lstFavs -> {
             if(lstFavs != null) {
-                Log.e("KOOOOOOOOOOOOOOOOOO", "HIHI");
                 initFav(lstFavs);
             } else {
-                Log.e("OKKKKKKKKKKKKKKKKKK", "NOT VO INIT");
                 new MovieService().execute();
             }
         });

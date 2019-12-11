@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,74 +28,43 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "LoginActivity";
-    private EditText tvEmail;
-    private EditText tvPassword;
-    private Button btnLogin;
+public class SignupActivity   extends AppCompatActivity {
+    private TextView tvName;
+    private TextView tvEmail;
+    private TextView tvPassword;
     private Button btnSignup;
+    SharedPreferences sp;
     private LoadingDialog loadingDialog;
 
-    SharedPreferences sp;
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
         tvEmail = findViewById(R.id.tvEmail);
+        tvName = findViewById(R.id.tvName);
         tvPassword = findViewById(R.id.tvPassword);
-        btnLogin = findViewById(R.id.btnLogin);
         btnSignup = findViewById(R.id.btnSignup);
-        btnSignup = findViewById(R.id.btnSignup);
-        btnLogin.setOnClickListener(v -> login());
 
-        loadingDialog = new LoadingDialog(this);
+        setContentView(R.layout.activity_signup);
         sp = getSharedPreferences("user", MODE_PRIVATE);
+        loadingDialog = new LoadingDialog(this);
     }
 
-    public void btnSignupClick(View v) {
-        Intent intent = new Intent(getBaseContext(), SignupActivity.class);
-        startActivity(intent);
-    }
-
-
-    private void login() {
-        if (!validate()) {
-            onLoginFailed();
-            return;
-        }
-        String email = tvEmail.getText().toString();
-        String password = tvPassword.getText().toString();
-
-        loadingDialog.show();
-        new UserService().execute(email, password);
-    }
-
-    public void onLoginSuccess() {
-        btnLogin.setEnabled(true);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                loadingDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Đăng nhập thành công", Toast.LENGTH_LONG).show();
-            }
-        });
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+    public void backClick(View v){
+        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
-    public void onLoginFailed() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                loadingDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Đăng nhập không thành công", Toast.LENGTH_LONG).show();
-            }
-        });
-        btnLogin.setEnabled(true);
+    public void SignupClick(View v){
+
+        if (!validate()) {
+            onSignupFail();
+            return;
+        }
+        String email = tvEmail.getText().toString();
+        String password = tvPassword.getText().toString();
+        String name = tvName.getText().toString();
+        new UserService().execute(email, password,name);
     }
 
     public boolean validate() {
@@ -103,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = tvEmail.getText().toString();
         String password = tvPassword.getText().toString();
-
+        String name = tvName.getText().toString();
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             tvEmail.setError("Email không đúng");
             valid = false;
@@ -118,7 +87,31 @@ public class LoginActivity extends AppCompatActivity {
             tvPassword.setError(null);
         }
 
+        if(name.isEmpty() || name.length() > 100){
+            tvName.setError("Tên không vượt quá 100 ký tự!");
+            valid = false;
+        } else {
+            tvName.setError(null);
+        }
         return valid;
+    }
+
+    public void onSignupSuccess() {
+        btnSignup.setEnabled(true);
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void onSignupFail() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Đăng ký không thành công!", Toast.LENGTH_LONG).show();
+            }
+        });
+        btnSignup.setEnabled(true);
     }
 
     class UserService extends AsyncTask<String, Void, Void> implements Callback {
@@ -127,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             OkHttpClient client = new OkHttpClient();
 
-            HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/login").newBuilder();
+            HttpUrl.Builder urlBuilder = HttpUrl.parse("https://film-vietvite.herokuapp.com/api/signup").newBuilder();
 
             String url = urlBuilder.build().toString();
             Log.e("url", url);
@@ -136,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
             RequestBody formBody = new FormBody.Builder()
                     .add("email", strings[0])
                     .add("password", strings[1])
+//                    .add("name",strings[2])
                     .build();
 
             Request request = new Request.Builder()
@@ -143,13 +137,14 @@ public class LoginActivity extends AppCompatActivity {
                     .post(formBody)
                     .build();
 
+
             client.newCall(request).enqueue(this);
             return null;
         }
 
         @Override
         public void onFailure(Call call, IOException e) {
-            onLoginFailed();
+            onSignupFail();
         }
 
         @Override
@@ -157,8 +152,6 @@ public class LoginActivity extends AppCompatActivity {
             String rawStr = response.body().string();
 
             User user = Parser.parseUser(rawStr);
-
-
             SharedPreferences.Editor edit = sp.edit();
             edit.putString("userId", user.get_id());
             edit.putString("email", user.getEmail());
@@ -166,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
             edit.putString("rawStr", rawStr);
             edit.apply();
 
-            onLoginSuccess();
+            onSignupSuccess();
         }
     }
 }

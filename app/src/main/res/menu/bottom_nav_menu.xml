@@ -11,9 +11,9 @@
         android:icon="@drawable/ic_favorite_black_24dp"
         android:title="@string/title_favorite" />
 
-    <item
-        android:id="@+id/navigation_community"
-        android:icon="@drawable/ic_people_black_24dp"
-        android:title="@string/title_community" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_community"-->
+<!--        android:icon="@drawable/ic_people_black_24dp"-->
+<!--        android:title="@string/title_community" />-->
 
 </menu>

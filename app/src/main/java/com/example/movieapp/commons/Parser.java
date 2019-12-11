@@ -27,8 +27,8 @@ public class Parser {
 
     public static User parseUser(String s) {
         Moshi moshi = new Moshi.Builder().build();
-        Type movieType = Types.newParameterizedType(User.class);
-        final JsonAdapter<User> jsonAdapter = moshi.adapter(movieType);
+        Type Usertype = Types.newParameterizedType(User.class);
+        final JsonAdapter<User> jsonAdapter = moshi.adapter(Usertype);
         User user = null;
         try {
             user = jsonAdapter.fromJson(s);
@@ -37,6 +37,5 @@ public class Parser {
         }
         return user;
     }
-
 
 }

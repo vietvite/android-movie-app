@@ -17,9 +17,10 @@
         android:label="@string/title_favorite"
         tools:layout="@layout/fragment_favorite" />
 
-    <fragment
-        android:id="@+id/navigation_community"
-        android:name="com.example.movieapp.ui.account.AccountFragment"
-        android:label="@string/title_community"
-        tools:layout="@layout/fragment_community" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_community"-->
+<!--        android:name="com.example.movieapp.ui.account.AccountFragment"-->
+<!--        android:label="@string/title_community"-->
+<!--        tools:layout="@layout/fragment_community" />-->
+
 </navigation>

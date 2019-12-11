@@ -24,7 +24,9 @@
         <activity
             android:name=".ui.LoginActivity"
             android:theme="@style/AppTheme" />
-
+        <activity
+            android:name=".ui.SignupActivity"
+            android:theme="@style/AppTheme" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
