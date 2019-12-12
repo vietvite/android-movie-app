@@ -46,22 +46,5 @@ public class PlayerActivity extends AppCompatActivity {
         simpleExoPlayer.setPlayWhenReady(true);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong("exoPosition", simpleExoPlayer.getCurrentPosition());
-        Log.e("exoPosition", String.valueOf(simpleExoPlayer.getCurrentPosition()));
-    }
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        simpleExoPlayer.seekTo(savedInstanceState.getLong("exoPosition"));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        simpleExoPlayer.release();
-    }
 }

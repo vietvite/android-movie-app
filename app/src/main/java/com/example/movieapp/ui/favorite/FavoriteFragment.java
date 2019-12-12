@@ -43,15 +43,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FavoriteFragment extends Fragment implements MovieItemClickListener {
 
-    private FavoriteViewModel favoriteViewModel;
 
     private RecyclerView rvFav;
     private FavoriteAdapter favAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        favoriteViewModel =
-                ViewModelProviders.of(this).get(FavoriteViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         rvFav = root.findViewById(R.id.rv_favs);

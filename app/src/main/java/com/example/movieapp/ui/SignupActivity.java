@@ -50,7 +50,7 @@ public class SignupActivity   extends AppCompatActivity {
     }
 
     public void backClick(View v){
-        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -61,13 +61,20 @@ public class SignupActivity   extends AppCompatActivity {
             onSignupFail();
             return;
         }
+        tvEmail = findViewById(R.id.tvEmail);
+        tvName = findViewById(R.id.tvName);
+        tvPassword = findViewById(R.id.tvPassword);
         String email = tvEmail.getText().toString();
         String password = tvPassword.getText().toString();
         String name = tvName.getText().toString();
+        loadingDialog.show();
         new UserService().execute(email, password,name);
     }
 
     public boolean validate() {
+        tvEmail = findViewById(R.id.tvEmail);
+        tvName = findViewById(R.id.tvName);
+        tvPassword = findViewById(R.id.tvPassword);
         boolean valid = true;
 
         String email = tvEmail.getText().toString();
@@ -97,8 +104,14 @@ public class SignupActivity   extends AppCompatActivity {
     }
 
     public void onSignupSuccess() {
-        btnSignup.setEnabled(true);
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Đăng ký thành công", Toast.LENGTH_LONG).show();
+            }
+        });
+        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -111,7 +124,6 @@ public class SignupActivity   extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Đăng ký không thành công!", Toast.LENGTH_LONG).show();
             }
         });
-        btnSignup.setEnabled(true);
     }
 
     class UserService extends AsyncTask<String, Void, Void> implements Callback {
@@ -129,7 +141,7 @@ public class SignupActivity   extends AppCompatActivity {
             RequestBody formBody = new FormBody.Builder()
                     .add("email", strings[0])
                     .add("password", strings[1])
-//                    .add("name",strings[2])
+                   .add("name",strings[2])
                     .build();
 
             Request request = new Request.Builder()
@@ -151,13 +163,6 @@ public class SignupActivity   extends AppCompatActivity {
         public void onResponse(Call call, Response response) throws IOException {
             String rawStr = response.body().string();
 
-            User user = Parser.parseUser(rawStr);
-            SharedPreferences.Editor edit = sp.edit();
-            edit.putString("userId", user.get_id());
-            edit.putString("email", user.getEmail());
-            edit.putBoolean("logged", true);
-            edit.putString("rawStr", rawStr);
-            edit.apply();
 
             onSignupSuccess();
         }
