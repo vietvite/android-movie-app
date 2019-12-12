@@ -44,6 +44,8 @@ public class SignupActivity   extends AppCompatActivity {
         tvPassword = findViewById(R.id.tvPassword);
         btnSignup = findViewById(R.id.btnSignup);
 
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_signup);
         sp = getSharedPreferences("user", MODE_PRIVATE);
         loadingDialog = new LoadingDialog(this);
