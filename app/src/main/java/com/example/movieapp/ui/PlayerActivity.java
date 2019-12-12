@@ -3,9 +3,11 @@ package com.example.movieapp.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.example.movieapp.R;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -30,7 +32,7 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         getSupportActionBar().hide();
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         VIDEO_URL = getIntent().getExtras().getString("linkMovie");
         if(VIDEO_URL == null) {
             VIDEO_URL = "http://film-vietvite.herokuapp.com/movies/avenger4.mp4";
@@ -44,6 +46,14 @@ public class PlayerActivity extends AppCompatActivity {
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataFactory).createMediaSource(Uri.parse(VIDEO_URL));
         simpleExoPlayer.prepare(videoSource);
         simpleExoPlayer.setPlayWhenReady(true);
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // In landscape
+
+        } else {
+            // In portrait
+        }
     }
 
 
